@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "# r <- plumb(\"quote_search.R\")\n# r$run(port = 8000)\n\n\n\n#' @param search_term A string representing the term to be searched for.\n#' @parm char_count An optional integer input parameter representing the max character count. If not included, the default is set at 300. \n#' @return A JSON of every quote related to that search term, with quote, author, category, character count. The keyword can be matched in the content's text, quthor, or category.\n#* @get /search\nquote_search <- function(search_term, char_count = 300) {\n  #clean input \n  library(magrittr)\n  library(stringr)\n  library(SnowballC)\n  library(RSQLite)\n  search_term <- search_term %>% str_to_lower() %>% str_trim() %>% wordStem()\n  \n  #connect to database\n  db <- dbConnect(SQLite(), \"Auto_Generation.sqlite\")\n  \n  #verify connection\n  if (dbIsValid(db) & dbExistsTable(db, \"Content\")) {\n    \n    #query table for input category\n    content <- dbGetQuery(db, paste(\"SELECT * FROM Content WHERE Text LIKE \\'%\", search_term, \"%\\'AND Char_Count <\",char_count, \n                                                            \" OR Author LIKE \\'%\", search_term, \"%\\'AND Char_Count <\",char_count, \n                                                            \" OR Category LIKE \\'%\", search_term, \"%\\'AND Char_Count <\",char_count,\";\", sep =\"\"))\n    \n    if (nrow(content) == 0) {\n      warning(\"There was not any content containing that search term.\")\n    }\n    \n    #convert to JSON \n    library(jsonlite)\n    output <- toJSON(content)\n  } else {\n    stop(\"Error connecting to the database.\")\n  }\n  \n  print('hi')\n  dbGetQuery(db, paste(\"SELECT * FROM Content WHERE Text LIKE \\'%\", \"mountain\", \"%\\'AND Char_Count <\",300))\n  \n  return(output)\n  output\n}",
+    "created" : 1471429148280.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1818848748",
+    "id" : "92438191",
+    "lastKnownWriteTime" : 1471422195,
+    "last_content_update" : 1471429509115,
+    "path" : "C:/Users/maggie.lou/Dropbox/MyDocuments/NU 2019/Data Mining/Projects/Over/Quote_Generation/quote_search.R",
+    "project_path" : "quote_search.R",
+    "properties" : {
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

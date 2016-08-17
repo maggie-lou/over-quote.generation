@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "r <- plumb(\"quote_generation.R\")\nr$run(port = 8000)",
+    "created" : 1471429392251.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "17149618",
+    "id" : "77C6113D",
+    "lastKnownWriteTime" : 1471429411,
+    "last_content_update" : 1471429411495,
+    "path" : "C:/Users/maggie.lou/Dropbox/MyDocuments/NU 2019/Data Mining/Projects/Over/Quote_Generation/run_api.R",
+    "project_path" : "run_api.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

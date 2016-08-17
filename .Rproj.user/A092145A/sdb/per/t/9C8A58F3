@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#' @param ID An int vector representing the ID numbers of the rows you want to remove.\nremove_row <- function(ID) {\n  #connect to database\n  library(RSQLite)\n  db <- dbConnect(SQLite(), \"Auto_Generation.sqlite\")\n  \n  #verify connection\n  if (dbIsValid(db) & dbExistsTable(db, \"Content\")) {\n    \n    #remove rows\n    for (i in ID) {\n      dbGetQuery(db, paste(\"DELETE FROM Content WHERE id = \", i, sep = \"\"))\n    }\n    \n  }\n}\n\n\n\n#' @param ID An int representing the ID number of the row you want to edit.\n#' @param field A string representing the field to be edited \n#' @param edit A string representing the new text to be input into the table \n#' @details Valid fields that can be edited are : Text, Author, and Category. ID and char_count can not be edited. If text is edited, char_count is automatically updated. \nedit_row <- function(ID, field, edit) {\n  \n  #clean inputs \n  library(magrittr)\n  library(stringr)\n  field <- field %>% str_to_title() %>% str_trim()\n  \n  #don't let user edit ID or char_count \n  if (field == \"Id\" | field == \"Char_count\") {\n    stop(\"You cannot edit the ID or char_count fields.\")\n  }\n  \n  #connect to database\n  library(RSQLite)\n  db <- dbConnect(SQLite(), \"Auto_Generation.sqlite\")\n  \n  #verify connection\n  if (dbIsValid(db) & dbExistsTable(db, \"Content\")) {\n    \n    #save field to be updated \n    old <- (dbGetQuery(db, paste(\"SELECT \", field, \" FROM Content WHERE ID = \", ID, sep = \"\")))[1,1]\n    \n    #edit field \n    dbGetQuery(db, paste(\"UPDATE Content SET \", field, \" = '\", edit, \"' WHERE ID = \", ID, sep = \"\"))\n    \n    #recalculate char_count if text was edited \n    if (field == \"Text\") {\n      char_count <- nchar(edit)\n      dbGetQuery(db, paste(\"UPDATE Content SET Char_count = \", char_count, \" WHERE ID = \", ID, sep = \"\"))\n    }\n  }\n  \n  print(paste(\"You replaced the \", field, \" \", old, \" with \",edit, \".\", sep = \"\"))\n}",
+    "created" : 1471429057993.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3920969013",
+    "id" : "9C8A58F3",
+    "lastKnownWriteTime" : 1471271546,
+    "last_content_update" : 1471271546,
+    "path" : "C:/Users/maggie.lou/Dropbox/MyDocuments/NU 2019/Data Mining/Projects/Over/Quote_Generation/edit_table.R",
+    "project_path" : "edit_table.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
